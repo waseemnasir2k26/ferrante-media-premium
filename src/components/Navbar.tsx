@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, ChevronDown, Sparkles } from 'lucide-react'
+import { Menu, X, ChevronDown, Phone, Calculator, Target, ArrowRight } from 'lucide-react'
 
 const navLinks = [
   { name: 'Home', href: '#home' },
   { name: 'Services', href: '#services' },
-  { name: 'Process', href: '#process' },
+  { name: 'How It Works', href: '#process' },
   {
-    name: 'Tools',
-    href: '#calculator',
+    name: 'Calculators',
+    href: '#revenue-calculator',
     dropdown: [
-      { name: 'ROI Calculator', href: '#calculator' },
-      { name: 'Revenue Leak Calculator', href: '#calculator' },
-      { name: 'AI Readiness Audit', href: '#calculator' },
+      { name: 'Revenue Leak Calculator', href: '#revenue-calculator', icon: Phone, desc: 'See how much you\'re losing' },
+      { name: 'ROI Calculator', href: '#roi-calculator', icon: Calculator, desc: 'Calculate your potential ROI' },
+      { name: 'AI Readiness Audit', href: '#ai-audit', icon: Target, desc: 'Assess your automation potential' },
     ]
   },
   { name: 'Industries', href: '#industries' },
@@ -32,6 +32,20 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  const handleNavClick = (href: string) => {
+    setIsMobileMenuOpen(false)
+    setOpenDropdown(null)
+
+    // Handle calculator tab switching
+    if (href.includes('calculator') || href.includes('audit')) {
+      const element = document.getElementById(href.replace('#', ''))
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        element.click()
+      }
+    }
+  }
+
   return (
     <motion.header
       initial={{ y: -100 }}
@@ -39,22 +53,22 @@ export default function Navbar() {
       transition={{ duration: 0.6, ease: 'easeOut' }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled
-          ? 'bg-dark-950/90 backdrop-blur-xl border-b border-white/5 py-3'
-          : 'bg-transparent py-5'
+          ? 'bg-dark-950/95 backdrop-blur-xl border-b border-white/5 py-3'
+          : 'bg-dark-950/50 backdrop-blur-sm py-4'
       }`}
     >
       <nav className="container-custom">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <a href="#home" className="flex items-center gap-3 group">
-            <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center group-hover:shadow-lg group-hover:shadow-primary-500/30 transition-shadow duration-300">
+            <div className="relative w-11 h-11 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center shadow-lg shadow-primary-500/20 group-hover:shadow-primary-500/40 transition-all duration-300">
               <span className="text-white font-bold text-xl font-display">F</span>
             </div>
             <div className="flex flex-col">
-              <span className="text-white font-bold text-lg font-display tracking-tight">
+              <span className="text-white font-bold text-lg font-display tracking-tight leading-tight">
                 Ferrante Media
               </span>
-              <span className="text-[10px] text-primary-400 font-medium uppercase tracking-widest">
+              <span className="text-[10px] text-primary-400 font-semibold uppercase tracking-[0.2em]">
                 AI Automation
               </span>
             </div>
@@ -71,30 +85,40 @@ export default function Navbar() {
               >
                 <a
                   href={link.href}
-                  className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-dark-300 hover:text-white transition-colors duration-200"
+                  onClick={() => handleNavClick(link.href)}
+                  className="flex items-center gap-1 px-4 py-2.5 text-sm font-medium text-dark-300 hover:text-white transition-colors duration-200"
                 >
                   {link.name}
-                  {link.dropdown && <ChevronDown className="w-4 h-4" />}
+                  {link.dropdown && (
+                    <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${openDropdown === link.name ? 'rotate-180' : ''}`} />
+                  )}
                 </a>
 
                 {/* Dropdown */}
                 <AnimatePresence>
                   {link.dropdown && openDropdown === link.name && (
                     <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }}
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
                       transition={{ duration: 0.2 }}
-                      className="absolute top-full left-0 pt-2"
+                      className="absolute top-full left-0 pt-3"
                     >
-                      <div className="bg-dark-900 border border-white/10 rounded-xl p-2 min-w-[200px] shadow-2xl">
+                      <div className="bg-dark-900/95 backdrop-blur-xl border border-white/10 rounded-2xl p-3 min-w-[280px] shadow-2xl shadow-black/50">
                         {link.dropdown.map((item) => (
                           <a
                             key={item.name}
                             href={item.href}
-                            className="block px-4 py-2.5 text-sm text-dark-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors duration-200"
+                            onClick={() => handleNavClick(item.href)}
+                            className="flex items-start gap-3 px-4 py-3 text-sm rounded-xl hover:bg-white/5 transition-colors duration-200 group"
                           >
-                            {item.name}
+                            <div className="w-10 h-10 rounded-lg bg-primary-500/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary-500/20 transition-colors">
+                              <item.icon className="w-5 h-5 text-primary-400" />
+                            </div>
+                            <div>
+                              <p className="font-medium text-white group-hover:text-primary-300 transition-colors">{item.name}</p>
+                              <p className="text-xs text-dark-400 mt-0.5">{item.desc}</p>
+                            </div>
                           </a>
                         ))}
                       </div>
@@ -106,25 +130,29 @@ export default function Navbar() {
           </div>
 
           {/* CTA Button */}
-          <div className="hidden lg:flex items-center gap-4">
+          <div className="hidden lg:flex items-center gap-3">
+            <a
+              href="tel:+1234567890"
+              className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-dark-300 hover:text-white transition-colors"
+            >
+              <Phone className="w-4 h-4" />
+              <span className="hidden xl:inline">(123) 456-7890</span>
+            </a>
             <a
               href="#cta"
-              className="group relative inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-white bg-gradient-to-r from-primary-600 to-accent-600 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/25"
+              className="group relative inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-dark-900 bg-gradient-to-r from-gold-400 to-gold-500 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-gold-500/25"
             >
-              <span className="relative z-10 flex items-center gap-2">
-                <Sparkles className="w-4 h-4" />
-                Get Started Free
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-primary-500 to-accent-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <span className="relative z-10">Book Free Call</span>
+              <ArrowRight className="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform" />
             </a>
           </div>
 
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden p-2 text-white"
+            className="lg:hidden p-2.5 text-white bg-dark-800/50 rounded-xl border border-white/10"
           >
-            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
 
@@ -138,24 +166,41 @@ export default function Navbar() {
               transition={{ duration: 0.3 }}
               className="lg:hidden mt-4 pb-4"
             >
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-1 bg-dark-900/50 rounded-2xl p-3 border border-white/5">
                 {navLinks.map((link) => (
-                  <a
-                    key={link.name}
-                    href={link.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="px-4 py-3 text-base font-medium text-dark-300 hover:text-white hover:bg-white/5 rounded-xl transition-colors duration-200"
-                  >
-                    {link.name}
-                  </a>
+                  <div key={link.name}>
+                    <a
+                      href={link.href}
+                      onClick={() => handleNavClick(link.href)}
+                      className="flex items-center justify-between px-4 py-3 text-base font-medium text-dark-200 hover:text-white hover:bg-white/5 rounded-xl transition-colors duration-200"
+                    >
+                      {link.name}
+                      {link.dropdown && <ChevronDown className="w-4 h-4" />}
+                    </a>
+                    {link.dropdown && (
+                      <div className="ml-4 mt-1 space-y-1">
+                        {link.dropdown.map((item) => (
+                          <a
+                            key={item.name}
+                            href={item.href}
+                            onClick={() => handleNavClick(item.href)}
+                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-dark-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                          >
+                            <item.icon className="w-4 h-4 text-primary-400" />
+                            {item.name}
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 ))}
                 <a
                   href="#cta"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="mt-4 btn-primary text-center"
+                  className="mt-3 flex items-center justify-center gap-2 py-3.5 bg-gradient-to-r from-gold-400 to-gold-500 text-dark-900 font-bold rounded-xl"
                 >
-                  <Sparkles className="w-4 h-4 mr-2" />
-                  Get Started Free
+                  Book Free Strategy Call
+                  <ArrowRight className="w-4 h-4" />
                 </a>
               </div>
             </motion.div>
