@@ -1,0 +1,251 @@
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/inter/700.css';
+@import '@fontsource/space-grotesk/400.css';
+@import '@fontsource/space-grotesk/500.css';
+@import '@fontsource/space-grotesk/600.css';
+@import '@fontsource/space-grotesk/700.css';
+
+@import "tailwindcss";
+
+@theme {
+  --color-primary-50: #f0f9ff;
+  --color-primary-100: #e0f2fe;
+  --color-primary-200: #bae6fd;
+  --color-primary-300: #7dd3fc;
+  --color-primary-400: #38bdf8;
+  --color-primary-500: #0ea5e9;
+  --color-primary-600: #0284c7;
+  --color-primary-700: #0369a1;
+  --color-primary-800: #075985;
+  --color-primary-900: #0c4a6e;
+
+  --color-accent-50: #fdf4ff;
+  --color-accent-100: #fae8ff;
+  --color-accent-200: #f5d0fe;
+  --color-accent-300: #f0abfc;
+  --color-accent-400: #e879f9;
+  --color-accent-500: #d946ef;
+  --color-accent-600: #c026d3;
+  --color-accent-700: #a21caf;
+  --color-accent-800: #86198f;
+  --color-accent-900: #701a75;
+
+  --color-dark-50: #f8fafc;
+  --color-dark-100: #f1f5f9;
+  --color-dark-200: #e2e8f0;
+  --color-dark-300: #cbd5e1;
+  --color-dark-400: #94a3b8;
+  --color-dark-500: #64748b;
+  --color-dark-600: #475569;
+  --color-dark-700: #334155;
+  --color-dark-800: #1e293b;
+  --color-dark-900: #0f172a;
+  --color-dark-950: #020617;
+
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+
+  --color-gold-400: #fbbf24;
+  --color-gold-500: #f59e0b;
+  --color-gold-600: #d97706;
+
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+
+  --animate-gradient: gradient 8s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-glow: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes gradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 20px rgba(14, 165, 233, 0.3); }
+  100% { box-shadow: 0 0 40px rgba(14, 165, 233, 0.6); }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-dark-950 text-white antialiased;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+::selection {
+  @apply bg-primary-500/30 text-white;
+}
+
+/* Glass Effects */
+.glass {
+  @apply bg-white/5 backdrop-blur-xl border border-white/10;
+}
+
+.glass-dark {
+  @apply bg-dark-900/80 backdrop-blur-xl border border-white/5;
+}
+
+/* Gradient Text */
+.gradient-text {
+  @apply bg-linear-to-r from-primary-400 via-accent-400 to-primary-400 bg-clip-text text-transparent;
+  background-size: 200% auto;
+  animation: gradient 3s linear infinite;
+}
+
+/* Gradient Border */
+.gradient-border {
+  @apply relative;
+}
+
+.gradient-border::before {
+  content: '';
+  @apply absolute inset-0 rounded-2xl p-px;
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-accent-500), var(--color-primary-500));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+/* Buttons */
+.btn-primary {
+  @apply relative inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-white;
+  @apply bg-linear-to-r from-primary-600 to-primary-500 rounded-xl;
+  @apply transition-all duration-300;
+  @apply hover:from-primary-500 hover:to-primary-400 hover:shadow-lg hover:shadow-primary-500/25;
+  @apply active:scale-[0.98] transform;
+}
+
+.btn-secondary {
+  @apply relative inline-flex items-center justify-center px-8 py-4 text-base font-semibold;
+  @apply bg-transparent text-white border-2 border-white/20 rounded-xl;
+  @apply transition-all duration-300;
+  @apply hover:bg-white/10 hover:border-white/40;
+  @apply active:scale-[0.98] transform;
+}
+
+.btn-gold {
+  @apply relative inline-flex items-center justify-center px-8 py-4 text-base font-bold text-dark-900;
+  @apply bg-linear-to-r from-gold-400 via-gold-500 to-gold-400 rounded-xl;
+  @apply transition-all duration-300;
+  @apply hover:from-gold-500 hover:via-gold-400 hover:to-gold-500 hover:shadow-lg hover:shadow-gold-500/30;
+  @apply active:scale-[0.98] transform;
+}
+
+/* Cards */
+.card {
+  @apply relative bg-dark-900/50 backdrop-blur-sm border border-white/5 rounded-2xl p-8;
+  @apply transition-all duration-500 hover:border-primary-500/30 hover:bg-dark-900/70;
+}
+
+.card-glow {
+  @apply relative overflow-hidden;
+}
+
+.card-glow::before {
+  content: '';
+  @apply absolute -inset-[100%] opacity-0 transition-opacity duration-500;
+  background: conic-gradient(from 180deg at 50% 50%, var(--color-primary-500), var(--color-accent-500), var(--color-primary-500));
+  animation: spin 4s linear infinite;
+}
+
+.card-glow:hover::before {
+  @apply opacity-30;
+}
+
+/* Layout Utilities */
+.section-padding {
+  @apply py-24 lg:py-32;
+}
+
+.container-custom {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* Typography */
+.heading-xl {
+  @apply text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold font-display tracking-tight leading-[1.1];
+}
+
+.heading-lg {
+  @apply text-3xl sm:text-4xl lg:text-5xl font-bold font-display tracking-tight leading-[1.15];
+}
+
+.heading-md {
+  @apply text-2xl sm:text-3xl lg:text-4xl font-bold font-display tracking-tight leading-[1.2];
+}
+
+.subheading {
+  @apply text-lg sm:text-xl text-dark-300 leading-relaxed;
+}
+
+/* Link Underline Effect */
+.link-underline {
+  @apply relative inline-block;
+}
+
+.link-underline::after {
+  content: '';
+  @apply absolute bottom-0 left-0 w-0 h-[2px];
+  background: linear-gradient(to right, var(--color-primary-400), var(--color-accent-400));
+  @apply transition-all duration-300;
+}
+
+.link-underline:hover::after {
+  @apply w-full;
+}
+
+/* Text Balance */
+.text-balance {
+  text-wrap: balance;
+}
+
+/* Animation In */
+.animate-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-dark-950;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-dark-700 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-dark-600;
+}
